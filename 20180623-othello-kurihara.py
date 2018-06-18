@@ -6,7 +6,7 @@ import numpy
 import pprint
 import sys
 ## かなさんモジュール
-import board_print
+import board_print-kurihara
 
 # 定数宣言
 BLANK = 0
