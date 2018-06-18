@@ -145,7 +145,7 @@ while pass_count < 2:
         continue
 
     # (置ける場所を追加した後の) 盤面を表示
-    board_print.board_print(board)
+    board_print_kurihara.board_print(board)
 
     # 現在の色を確認
     print('> あなたの石色: ', end='')   # python3.X における記述方法 (2.X だとこのような記述はできない)
@@ -291,7 +291,7 @@ while pass_count < 2:
                         n = n
 
         # (置いてひっくり返したあとの) 盤面を表示
-        board_print.board_print(board)
+        board_print_kurihara.board_print(board)
         my_color = my_color * SWITCH_COLOR
         opponent_color = opponent_color * SWITCH_COLOR
         print("> プレイヤーを交代してください")
