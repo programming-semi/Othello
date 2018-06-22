@@ -12,7 +12,7 @@
 #        「このプログラムがオセロとしてちゃんと遊べるかどうか」という意味では，たぶん OK
 #        「プログラムが読みやすいか，拡張性 (機能を追加したり，変更したりしやすいか) があるかどうか」という意味では NG
 #                 # 変数名が分かりづらかったり，関数化されてなかったり，エラー処理がちゃんとできていなかったりなど ...
-#        
+#
 #        !! <board_print_kurihara.py> とセットでこのプログラムを使ってください
 #
 
@@ -46,8 +46,7 @@ board = [[WALL, WALL,  WALL,  WALL,  WALL,  WALL,  WALL,  WALL,  WALL,  WALL],
 
 my_color = BLACK        # プレイヤー 1 の色
 opponent_color = WHITE  # プレイヤー 2 の色
-pass_count = 0          # パスが何回行われたか (2 回行われたらゲーム終了)
-can_put_flag = False    # 置ける場所があったかどうかフラグ
+pass_count = 0          # パスが何回行われたか (2 回連続でパスが行われたらゲーム終了)
 
 # 2 連続パスが行われるまでゲームを続ける
 while pass_count < 2:
@@ -129,8 +128,8 @@ while pass_count < 2:
                         if board[i-k][j+k] == BLANK:
                             board[i-k][j+k] = CAN_PUT
 
-    # 置ける場所があったかどうかを変数へ格納．置ける場所が一箇所でもあれば OK
-    can_put_flag = False
+    # 置ける場所があったかどうかを変数へ格納 (置ける場所が一箇所でもあれば OK)．
+    can_put_flag = False    # 置ける場所があるかどうかのフラグ: 一箇所でもあればとりあえず OK
     for i in range(1, 9):
         if can_put_flag == True:
             break
@@ -140,18 +139,18 @@ while pass_count < 2:
                 pass_count = 0
                 break
 
-    # どこにも置けない ==> ターン交代して，pass を 1 増やす
+    # どこにも置けない ==> ターンを交代して，pass を 1 増やし，上の while へ戻る
     if can_put_flag == False:
-        pass_count += 1
         my_color = my_color * SWITCH_COLOR
         opponent_color = opponent_color * SWITCH_COLOR
-        continue
+        pass_count += 1 # <==> pass_count = pass_count + 1
+        continue        # 現在のスコープから抜けて，そのスコープのスタート (while, for など) に戻って，命令を繰り返す
 
     # (置ける場所を追加した後の) 盤面を表示
     board_print_kurihara.board_print(board)
 
     # 現在の色を確認
-    print('> あなたの石色: ', end='')   # python3.X における記述方法 (2.X だとこのような記述はできない)
+    print('> あなたの石色: ', end='')   # python3.X における記述方法 (2.X だとこのような記述はできないっぽい)
     if my_color == BLACK:
         print('● (黒)')
     else:
@@ -295,6 +294,8 @@ while pass_count < 2:
 
         # (置いてひっくり返したあとの) 盤面を表示
         board_print_kurihara.board_print(board)
+
+        # プレイヤー交代
         my_color = my_color * SWITCH_COLOR
         opponent_color = opponent_color * SWITCH_COLOR
         print("> プレイヤーを交代してください")
@@ -304,10 +305,8 @@ while pass_count < 2:
         print("> ごめんなさい，そのマスには置けません．石を置き直してください")
         # このときに処理どうしよう ...
 
-#
-# ゲーム終了 (while を抜けた ==> pass_cnt が 2 ==> 置ける場所がない ==> 対局終了)
-#
 
+# ゲーム終了 (while を抜けた ==> pass_cnt > 2 ==> 置ける場所がない ==> 対局終了)
 print("> 置ける場所が無くなりました．対局を終了します")
 
 # カウンター 2 つ
